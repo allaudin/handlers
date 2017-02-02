@@ -1,0 +1,35 @@
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    compileSdkVersion = 24
+    buildToolsVersion = '24.0.0'
+    minSdkVersion = 16
+    targetSdkVersion = 24
+    supportLibVersion = '24.0.0'
+    junitVersion = '4.12'
+    rxAndroid = '1.2.1'
+    rxJava = '1.1.6'
+    gsonVersion = '2.8.0'
+    espressoVersion = '2.2.2'
+    // need  provided 'javax.annotation:jsr250-api:1.0' with dagger 2.0
+    daggerVersion = '2.2'
+    retrofitVersion = '2.1.0'
+}
