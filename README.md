@@ -61,13 +61,13 @@ network call.
   
   
       ```java
-        EaseRequest.type(new TypeToken<EaseResponse<UserModel>>(){})
-                        .method().post()
-                        .body(body)
-                        .headers(headers)
-                        .requestId(100)
-                        .endPoint("users")
-                        .build().execute(this);
+        EaseRequest.type(new TypeToken<EaseResponse<List<UserModel>>>(){}) // type token discussed below
+                        .method().post() // request type
+                        .body(body) // body created in step 2
+                        .headers(headers) // headers created in step 1
+                        .requestId(100) // request ID for this request
+                        .endPoint("users") 
+                        .build().execute(this); // this = context
       ```
 
 Made with :heart: by allaudin
