@@ -1,7 +1,6 @@
 # handlers
 Source project for article https://allaudin.github.io/looper-handler-api/
 
-
 ## Ease Volley Wrapper
 
 **Ease** is a wrapper around [Volley](https://github.com/google/volley) for handling network 
@@ -46,6 +45,8 @@ network call.
 
 ## Building a Request
 
+Creating a request with *Ease* is literally easy. 
+
   1. Creating Request Headers *[Optional]*
   
       ```java
@@ -67,24 +68,67 @@ network call.
                         .headers(headers) // headers created in step 1
                         .requestId(100) // request ID for this request
                         .endPoint("users") 
+                        .responseCallbacks(this) // callbacks
                         .build().execute(this); // this = context
       ```
 
 ## Creating type tokens
 
-In order to parse a network to arbitrary objects using *Gson* you need to pass `type information` of the `Object`
+In order to parse a network response to arbitrary objects using *Gson* you need to pass `type information` of the `Object`
 to `Ease`. This can be done with `TypeToken` class which accepts required type as parametrized type. e.g.
 
     new TypeToken<EaseResponse<List<UserModel>>>(){}
 
 It will convert the *data* key from network response into a list of `UserModels`.
 
-This syntax is a little ugly but we have no other choice in case of *Generic types*. For creating token of 
-**non-generic** types, `Ease` has a utility class for this purpose with easy to remember syntax. e.g. following 
-line of code returns a `TypeToken` for type `UserModel`
+This syntax is a little ugly but we have no other choice in case of *Generic types*.
 
-    EaseType.get(UserModel.class)
+## Getting response as String
+
+Typically `Ease` will convert network response to required type but sometimes you want it without conversion e.g. in case 
+you want to receive many requests with same callback, taking the responsibility of converting *JSON* response
+to model yourself. For this purpose, `Ease` provides `asString(Class<T>)` method for getting response as String.
+
+      EaseRequest.asString(String.class)...
+
+## Receiving Response
+
+Ease offers a clean way for handling network response by using `EaseCallbacks` interface. For 
+above example response can be handheld as following.
+
+```java
+
+   @Override
+    public void onSuccess(@NonNull EaseRequest<List<UserModel>> request, @NonNull String description, @NonNull List<UserModel> data) {
+            // on success, use request.id() for getting request id.
+    }
 
 
+    @Override
+    public void onFailure(@NonNull EaseRequest<List<UserModel>> request, @NonNull String description) {
+            // request failed with description
+    }
+
+
+    @Override
+    public void onError(@NonNull EaseRequest<List<UserModel>> request, @NonNull EaseException e) {
+            // error occured while connecting to server
+    }
+    
+```
+
+
+## Running network call in background
+
+For running network calls in background, you can call `runInBackground()` while building network request. If 
+network call is running in background **no progress dialog will be shown to user**.
+
+## Setting progress dialog for all requests
+
+`Ease` require `EaseDialog` object for displaying progress dialog. `Ease` comes with 
+default implementation of this interface, however you can set your own implementation
+as default by passing your own implementation from `EaseUtisl.getDefaultDialog()` method.
+
+With each request, client has an option to pass `EaseDialog` to specific request.
 
 Made with :heart: by allaudin
