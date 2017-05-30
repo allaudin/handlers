@@ -70,4 +70,21 @@ network call.
                         .build().execute(this); // this = context
       ```
 
+## Creating type tokens
+
+In order to parse a network to arbitrary objects using *Gson* you need to pass `type information` of the `Object`
+to `Ease`. This can be done with `TypeToken` class which accepts required type as parametrized type. e.g.
+
+    new TypeToken<EaseResponse<List<UserModel>>>(){}
+
+It will convert the *data* key from network response into a list of `UserModels`.
+
+This syntax is a little ugly but we have no other choice in case of *Generic types*. For creating token of 
+**non-generic** types, `Ease` has a utility class for this purpose with easy to remember syntax. e.g. following 
+line of code returns a `TypeToken` for type `UserModel`
+
+    EaseType.get(UserModel.class)
+
+
+
 Made with :heart: by allaudin
